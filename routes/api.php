@@ -57,15 +57,22 @@ Route::get('/ping', function (Request $request) {
     This is just to show the code looks identical to the MongoDB version
 */
 Route::get('/create_eloquent_sql/', function (Request $request) {
-    $success = CustomerSQL::create([
-        'guid'        => 'cust_0000',
-        'first_name'  => 'John',
-        'family_name' => 'Doe',
-        'email'       => 'j.doe@gmail.com',
-        'address'     => '123 my street, my city, zip, state, country'
-    ]);
+
+    try {
+        $success = CustomerSQL::create([
+            'guid'        => 'cust_0000',
+            'first_name'  => 'John',
+            'family_name' => 'Doe',
+            'email'       => 'j.doe@gmail.com',
+            'address'     => '123 my street, my city, zip, state, country'
+        ]);
+        $msg = "OK";
+    }
+    catch (\Exception $e) {
+        $msg =  'Create user via Eloquent SQL model. Error: ' . $e->getMessage();
+    }
     
-    return ['msg' => 'executed', 'data' => $success];
+    return ['status' => 'executed', 'msg' => $msg];
 });
 
 /* 
@@ -73,15 +80,21 @@ Route::get('/create_eloquent_sql/', function (Request $request) {
     This is just to show the code looks identical to the MongoDB version
 */
 Route::get('/create_eloquent_mongo/', function (Request $request) {
-    $success = CustomerMongoDB::create([
-        'guid'        => 'cust_1111',
-        'first_name'  => 'John',
-        'family_name' => 'Doe',
-        'email'       => 'j.doe@gmail.com',          
-        'address'     => '123 my street, my city, zip, state, country'
-    ]);
+    try {
+        $success = CustomerMongoDB::create([
+            'guid'        => 'cust_1111',
+            'first_name'  => 'John',
+            'family_name' => 'Doe',
+            'email'       => 'j.doe@gmail.com',          
+            'address'     => '123 my street, my city, zip, state, country'
+        ]);
+        $msg = "OK";
+    }
+    catch (\Exception $e) {
+        $msg =  'Create user via Eloquent MongoDB model. Error: ' . $e->getMessage();
+    }
 
-    return ['msg' => 'executed', 'data' => $success];
+    return ['status' => 'executed', 'data' => $msg];
 });
 
 /* 
@@ -91,25 +104,25 @@ Route::get('/find_eloquent/', function (Request $request) {
     
     $customer = CustomerMongoDB::where('guid', 'cust_1111')->get();
 
-    return ['msg' => 'executed', 'data' => $customer];
+    return ['status' => 'executed', 'data' => $customer];
 });
 
 /* 
     Update a record using Eloquent + MongoDB
 */
 Route::get('/update_eloquent/', function (Request $request) {
-    $result = CustomerMongoDB::where('guid', 'cust_1111')->update(['first_name','Jimmy']);
+    $result = CustomerMongoDB::where('guid', 'cust_1111')->update( ['first_name' => 'Jimmy'] );
 
-    return ['msg' => 'executed', 'data' => $result];
+    return ['status' => 'executed', 'data' => $result];
 });
 
 /* 
    Delete a record using Eloquent + MongoDB
 */
 Route::get('/delete_eloquent/', function (Request $request) {
-    $result = CustomerMongoDB::destroy('guid', 'cust_1111');
+    $result = CustomerMongoDB::where('guid', 'cust_1111')->delete();
 
-    return ['msg' => 'executed', 'data' => $result];
+    return ['status' => 'executed', 'data' => $result];
 });
 
 /* 
@@ -139,7 +152,7 @@ Route::get('/create_nested/', function (Request $request) {
         $message = $e->getMessage();
     }
 
-    return ['msg' => $message, 'data' => $success];
+    return ['status' => $message, 'data' => $success];
 });
 
 
@@ -194,7 +207,7 @@ Route::get('/find_native/', function (Request $request) {
         $cust_array[] = $cust->newFromBuilder( $bson );
     }
 
-    return ['msg' => 'executed', 'whereraw' => $results, 'document' => $one_doc, 'cursor_array' => $cust_array];
+    return ['status' => 'executed', 'whereraw' => $results, 'document' => $one_doc, 'cursor_array' => $cust_array];
 });
 
 /* 
@@ -207,7 +220,7 @@ Route::get('/update_native/', function (Request $request) {
     $update = ['$set' => ['first_name' => 'Henry', 'address.street' => '777 new street name'] ];
     $result = $mdb_collection->updateOne($match, $update );
 
-    return ['msg' => 'executed', 'matched_docs' => $result->getMatchedCount(), 'modified_docs' => $result->getModifiedCount()];
+    return ['status' => 'executed', 'matched_docs' => $result->getMatchedCount(), 'modified_docs' => $result->getModifiedCount()];
 });
 
 /* 
@@ -219,7 +232,7 @@ Route::get('/delete_native/', function (Request $request) {
     $match = ['guid' => 'cust_2222'];
     $result = $mdb_collection->deleteOne( $match );
 
-    return ['msg' => 'executed', 'deleted_docs' => $result->getDeletedCount() ];
+    return ['status' => 'executed', 'deleted_docs' => $result->getDeletedCount() ];
 });
 
 /* 
@@ -237,7 +250,7 @@ Route::get('/aggregate/', function (Request $request) {
 
     $mdb_cursor = $mdb_collection->aggregate( $aggregation );
 
-    return ['msg' => 'executed', 'data' => $mdb_cursor->toArray() ];
+    return ['status' => 'executed', 'data' => $mdb_cursor->toArray() ];
 });
 
 /* 
@@ -249,63 +262,5 @@ Route::get('/create_index/', function (Request $request) {
     $indexOptions = ["unique" => true];
     $result = DB::connection('mongodb')->getCollection('laracoll')->createIndex($indexKeys, $indexOptions); 
 
-    return ['msg' => 'executed', 'data' => $result ];
+    return ['status' => 'executed', 'data' => $result ];
 });
-
-
-/* 
-    TEMPORARY endpoint to test various snippets
-*/
-Route::get('/mongodb_api/', function (Request $request) {
-
-    $address = new stdClass;
-    $address->street = '123 my street name';
-    $address->city   = 'my city';
-    $address->zip    = '12345';
-
-    $emails = array( 'j.doe@gmail.com','j.doe@work.com' );
-
-    $customer = new CustomerMongoDB();
-    $customer->guid         = 'cust_1111';
-    $customer->first_name   = 'John';
-    $customer->family_name  = 'Doe';
-    $customer->email        = $emails;
-    $customer->address      = $address;    
-
-
-    $collectionName = $customer->getTable();
-
-    // ❌ what's the BEST WAY to access the native MongoDB collection object?
-    // getting it from the Model would be best since the Model knows about the connection AND the collection.
-    // but I don't see anything to achieve that
-
-    // this insertOne() works well with an stdClass, but ❌ not with a Model (use Model::save() instead)
-    //
-    // $result = DB::connection('mongodb')->getCollection('laracoll')->insertOne( $address );
-
-    // Create an index with a primary key
-    /* $indexKeys   = ["guid" => 1];
-    $indexOptions = ["unique" => true];
-    $result = DB::connection('mongodb')->getCollection('laracoll')->createIndex($indexKeys, $indexOptions); */
-
-    //
-    $query = ['guid' => 'cust_1111', ];
-    $cursor = DB::connection('mongodb')->getCollection('laracoll')->find( $query );
-    $result = $cursor->toArray(); 
-
-    /* 
-    // ❌ works, but not very convenient to pass parameters, data
-    $result = CustomerMongoDB::raw(function (Collection $collection) {
-        return $collection->insertOne( SOME DATA );
-    }); */
-
-
-    // aggregation pipeline
-    /* collection->aggregate($pipeline, $options)); */
-    
-    $resp       = new stdClass;
-    $resp->msg  = "executed";
-    $resp->data = $result;
-    return $resp;
-});
-
