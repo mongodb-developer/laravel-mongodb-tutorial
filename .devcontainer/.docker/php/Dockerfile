@@ -4,6 +4,12 @@ ARG RUNTIME_PHP_IMAGE
 # Use the specified image as the base
 FROM ${RUNTIME_PHP_IMAGE}
 
+# create the log file and provide permission to the www-data user
+RUN touch /tmp/xdebug.log && chown www-data:www-data /tmp/xdebug.log
+
+# same thing for the PHP error log
+RUN touch /var/log/php-errors.log && chown www-data:www-data /var/log/php-errors.log
+
 # Update the packages
 # Install system packages required for MongoDB extension
 RUN apt-get update \
@@ -52,3 +58,13 @@ RUN mv composer.phar /usr/local/bin/composer
 # NOT REQUIRED
 # Change to non-root privilege
 # USER www-data
+
+# Enable Error-logging in the PHP container
+# ----------------------------------------------------------
+
+# RUN echo "error_log = /var/log/php-fpm.log" >> /usr/local/etc/php-fpm.d/docker.conf
+
+#RUN echo "php_admin_value[error_log] = /var/log/php-fpm/www-error.log" >> /usr/local/etc/php-fpm.d/www.conf && \
+#    echo "php_admin_flag[log_errors] = on" >> /usr/local/etc/php-fpm.d/www.conf && \
+#    echo "catch_workers_output = yes" >> /usr/local/etc/php-fpm.d/www.conf
+

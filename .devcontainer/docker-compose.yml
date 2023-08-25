@@ -36,10 +36,10 @@ services:
         RUNTIME_PHP_IMAGE: ${PHP_IMAGE}
     image: ${PHP_IMAGE}
     # container-path
-    working_dir: ${WEBROOT_CONTAINER_PATH}
+    working_dir: ${PHP_WEBROOT_CONTAINER_PATH}
     # disk local-path
     volumes:
-      - ${WEBROOT_HOST_PATH}:${WEBROOT_CONTAINER_PATH}
+      - ${PHP_WEBROOT_HOST_PATH}:${PHP_WEBROOT_CONTAINER_PATH}
     
 
   # MySQL Service

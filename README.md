@@ -15,13 +15,24 @@ The article mentions several ways to get a Laravel development environment up an
 
 ## .env file 
 
-Not included in this repo is the .env file that contains the MongoDB connection string with the username / password. You'll have to make a cope of the .env.example file and add this variable: 
+#### Application key
+
+Laravel might ask to generate a new application key. You can do it by running this command in the laravel project folder. 
+
+`php artisan key:generate`
+
+#### MongoDB connection string
+
+Not included in this repo is the Laravel .env file that contains the MongoDB connection string with the username / password. You'll have to make a cope of the .env.example file and add this variable: 
 
 `DB_URI=`
 
 The complete URI looks like this:
 
 `DB_URI=mongodb+srv://USERNAME:PASSWORD@clustername.subdomain.mongodb.net/?retryWrites=true&w=majority`
+
+# Troubleshooting
+
 
 # Disclaimer
 
