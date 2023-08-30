@@ -13,7 +13,19 @@ You'll need the following installed on your computer to follow along with this t
 
 The article mentions several ways to get a Laravel development environment up and running. 
 
+# Preparing the Laravel project to run
+
+## Dependencies 
+
+In the Laravel project folder, install the Composer dependencies with the command
+
+`composer install`
+
 ## .env file 
+
+Laravel uses the .env file for environment-specific configurations, like database credentials, application key, and other settings. Create one from the included example file:
+
+`cp .env.example .env`
 
 #### Application key
 
@@ -31,7 +43,37 @@ The complete URI looks like this:
 
 `DB_URI=mongodb+srv://USERNAME:PASSWORD@clustername.subdomain.mongodb.net/?retryWrites=true&w=majority`
 
-# Troubleshooting
+# Xdebug
+
+The xdebug.php-debug VS Code extension is automatically installed if you launch via devcontainer.json.
+
+If you are using our container directly (docker compose up), or via VS Code (devcontainer), we suggest the following Xdebug configs visual studio
+
+### localhost
+
+The debug config file is located in `<repository_dir>/.vscode/launch.json`
+
+```json
+{
+  "name": "Listen for Xdebug",
+  "type": "php",
+  "request": "launch",
+  "port": 9003,
+  "pathMappings":  {
+    // ${workspaceFolder} == directory where /.vscode/ is
+    // the syntax is SERVER_PATH : LOCAL_PATH
+    "/var/www/htdoc": "${workspaceFolder}/src"
+  }
+},
+```
+
+### devcontainer
+
+- TODO
+
+### Codespaces
+
+- TODO
 
 
 # Disclaimer

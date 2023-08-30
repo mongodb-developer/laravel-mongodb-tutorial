@@ -31,7 +31,11 @@
 	// "xdebug.php-debug" = official XDEBUG extension
 	"customizations": {
 		"vscode": {
-			"extensions": ["xdebug.php-debug"]
+			"extensions": [
+				"xdebug.php-debug"
+			]
 		}
-	}
+	},
+
+	"forwardPorts": [80]
 }

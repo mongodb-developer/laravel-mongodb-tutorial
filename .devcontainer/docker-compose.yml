@@ -40,6 +40,8 @@ services:
     # disk local-path
     volumes:
       - ${PHP_WEBROOT_HOST_PATH}:${PHP_WEBROOT_CONTAINER_PATH}
+    # we don't need to expose the port 9003 here for Xdebug because the 
+    # connection comes from inside the PHP container to the IDE via port 9003
     
 
   # MySQL Service
