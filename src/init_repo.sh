@@ -10,6 +10,8 @@ cd /var/www/htdoc
 if [ ! -d "vendor" ]; then
     # Run composer install
     composer install
+    cp .env.example .env
+    php artisan key:generate
 fi
 
 # Then, execute the main command, e.g., starting PHP-FPM
