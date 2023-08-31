@@ -62,5 +62,6 @@ RUN mv composer.phar /usr/local/bin/composer
 WORKDIR /var/www/htdoc
 
 # start out script that runs composer install, but ONLY if /vendor/ does not exist
-RUN chmod +x /var/www/htdoc/init_repo.sh
+# WARNING: the commands below crash CodeSpaces. Not using for now.
+#RUN chmod +x /var/www/htdoc/init_repo.sh
 #ENTRYPOINT ["/var/www/htdoc/init_repo.sh"]
