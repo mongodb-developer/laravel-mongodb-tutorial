@@ -55,16 +55,11 @@ RUN curl -sS https://getcomposer.org/installer | php
 # copy composer to a place where it can be globally executed
 RUN mv composer.phar /usr/local/bin/composer
 
-# NOT REQUIRED
-# Change to non-root privilege
-# USER www-data
+# our repo is in var/www/htdoc
+# COPY init_repo.sh /var/www/htdoc/
 
-# Enable Error-logging in the PHP container
-# ----------------------------------------------------------
+# Set the working directory in the container
+WORKDIR /var/www/htdoc
 
-# RUN echo "error_log = /var/log/php-fpm.log" >> /usr/local/etc/php-fpm.d/docker.conf
-
-#RUN echo "php_admin_value[error_log] = /var/log/php-fpm/www-error.log" >> /usr/local/etc/php-fpm.d/www.conf && \
-#    echo "php_admin_flag[log_errors] = on" >> /usr/local/etc/php-fpm.d/www.conf && \
-#    echo "catch_workers_output = yes" >> /usr/local/etc/php-fpm.d/www.conf
-
+# start out script that runs composer install, but ONLY if /vendor/ does not exist
+ENTRYPOINT ["/var/www/htdoc/init_repo.sh"]
