@@ -13,4 +13,4 @@ if [ ! -d "vendor" ]; then
 fi
 
 # Then, execute the main command, e.g., starting PHP-FPM
-exec php-fpm
+# exec php-fpm

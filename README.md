@@ -15,33 +15,35 @@ The article mentions several ways to get a Laravel development environment up an
 
 # Preparing the Laravel project to run
 
-## Dependencies 
+Before the project can run properly, we need to take several actions.
+
+## 1. Install dependencies 
 
 In the Laravel project folder, install the Composer dependencies with the command
 
 `composer install`
 
-## .env file 
+## 2. Create the .env file 
 
 Laravel uses the .env file for environment-specific configurations, like database credentials, application key, and other settings. Create one from the included example file:
 
 `cp .env.example .env`
 
-#### Application key
+## 3. Generate a Laravel Application key
 
 Laravel might ask to generate a new application key. You can do it by running this command in the laravel project folder. 
 
 `php artisan key:generate`
 
-#### MongoDB connection string
+## 4. Add the MongoDB connection string to .env
 
-Not included in this repo is the Laravel .env file that contains the MongoDB connection string with the username / password. You'll have to make a cope of the .env.example file and add this variable: 
-
-`DB_URI=`
-
-The complete URI looks like this:
+We need to add the MongoDB connection string with the username / password to the .env file. add this line, but remember that your connection string might look different.
 
 `DB_URI=mongodb+srv://USERNAME:PASSWORD@clustername.subdomain.mongodb.net/?retryWrites=true&w=majority`
+
+## 5. Ready!
+
+Head to the site URL and you should see the Laravel Homepage
 
 # Xdebug
 
