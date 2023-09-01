@@ -1,6 +1,6 @@
 # How To Build a Laravel + MongoDB Back End Service 
 
-This code was writting in conjunction with [this article](https://www.mongodb.com/developer/languages/php/laravel-mongodb-tutorial/?utm_campaign=devrel).
+This code was writting to accompany [this article](https://www.mongodb.com/developer/languages/php/laravel-mongodb-tutorial/?utm_campaign=devrel).
 
 
 ## Prerequisites
@@ -13,45 +13,99 @@ You'll need the following installed on your computer to follow along with this t
 
 The article mentions several ways to get a Laravel development environment up and running. 
 
-# Preparing the Laravel project to run
+#  🚀 Launch this repo in CodeSpaces
 
-Before the project can run properly, we need to take several actions.
+<img src="https://i.imgur.com/5STvIPX.png">
 
-## 1. Install dependencies 
+⏳Codespaces will build the app's container(s). This may take **~3 minutes**.
 
-In the Laravel project folder, install the Composer dependencies with the command
+<img src="https://i.imgur.com/1IBKVjx.png">
 
-`composer install`
+✅Done! We now have our project running inside CodeSpaces. We can proceed to setting up Laravel
 
-## 2. Create the .env file 
+<img src="https://i.imgur.com/9b6P1ba.png">
 
-Laravel uses the .env file for environment-specific configurations, like database credentials, application key, and other settings. Create one from the included example file:
+<p></p><p></p>
 
-`cp .env.example .env`
+# 👋 Before you run this Laravel app
 
-## 3. Generate a Laravel Application key
+## 1. Laravel setup
 
-Laravel might ask to generate a new application key. You can do it by running this command in the laravel project folder. 
+After cloning the code repo or launching a Docker/CodeSpaces instance, the project needs a few more things before the Laravel App can run:
 
-`php artisan key:generate`
+1. install dependencies via Composer
+2. create a new .env file
+3. generate a new Laravel App Key
 
-## 4. Add the MongoDB connection string to .env
+You can conveniently do all three by running the `init_repo.sh` from the 
+PHP container. 
 
-We need to add the MongoDB connection string with the username / password to the .env file. add this line, but remember that your connection string might look different.
+<img src="https://i.imgur.com/P0ZNlot.png">
 
-`DB_URI=mongodb+srv://USERNAME:PASSWORD@clustername.subdomain.mongodb.net/?retryWrites=true&w=majority`
+The script will install the package via Composer, create an .env and create an App key.
 
-## 5. Ready!
+<img src="https://i.imgur.com/6P6MlFX.png">
+
+## 2. Ready!
 
 Head to the site URL and you should see the Laravel Homepage
 
-# Xdebug
+<img src="https://i.imgur.com/pkORDBj.png">
+
+<p></p>
+
+<img src="https://i.imgur.com/fbZlygD.png">
+
+Our base Laravel app is ready 🥳. 
+
+❗Note that this branch already has the Model and Migrations already setup. 
+
+
+**Next**, you can connect to a MongoDB Cluster and try some of the things we talked about in our [How To Build a Laravel + MongoDB Back End Service](https://www.mongodb.com/developer/languages/php/laravel-mongodb-tutorial/)
+
+Add the MongoDB connection string with the username / password to the .env file. add this line, but remember that your connection string might look different.
+
+In .env, add
+
+`DB_URI=mongodb+srv://USERNAME:PASSWORD@clustername.subdomain.mongodb.net/?retryWrites=true&w=majority`
+
+#  🚀 Launch locally with Docker
+
+Assuming that you already have Docker Desktop installed on Windows/Mac or Docker on Linux,
+
+- clone the repository to a local directory
+- navigate to the ./devcontainer folder
+- execute `docker compose up`
+- in the PHP container, execute the init_repo.sh script
+
+Once the containe(s) are up, visit http://localhost
+
+
+# Optional: Xdebug
 
 The xdebug.php-debug VS Code extension is automatically installed if you launch via devcontainer.json.
 
-If you are using our container directly (docker compose up), or via VS Code (devcontainer), we suggest the following Xdebug configs visual studio
+👀 **Important**: our `.devcontainer/.docker/php/xdebug.ini` file is setup by default with `xdebug.client_host=localhost`, which should works for **CodeSpaces** and Devcontainers. 
 
-### localhost
+For **local development**, you need to replace `localhost` with the IP where your code IDE runs or a dns name that maps to it. That's because your PHP container and the IDE host tend to have different IPs. 
+
+If you are using our container directly (docker compose up), or via VS Code (devcontainer), we suggest the following Xdebug configs visual studio. Note the difference in path mapping.
+
+## CodeSpaces and (inside a Devcontainer)
+
+```json
+{
+  "name": "Listen for Xdebug",
+  "type": "php",
+  "request": "launch",
+  "port": 9003,
+  "pathMappings":  {
+    "/var/www/htdoc": "${workspaceFolder}"
+  }
+},
+```
+
+## local development with Docker
 
 The debug config file is located in `<repository_dir>/.vscode/launch.json`
 
@@ -62,21 +116,10 @@ The debug config file is located in `<repository_dir>/.vscode/launch.json`
   "request": "launch",
   "port": 9003,
   "pathMappings":  {
-    // ${workspaceFolder} == directory where /.vscode/ is
-    // the syntax is SERVER_PATH : LOCAL_PATH
     "/var/www/htdoc": "${workspaceFolder}/src"
   }
 },
 ```
-
-### devcontainer
-
-- TODO
-
-### Codespaces
-
-- TODO
-
 
 # Disclaimer
 
