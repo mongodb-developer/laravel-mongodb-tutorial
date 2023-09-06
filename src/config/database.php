@@ -37,13 +37,13 @@ return [
 
         'mongodb' => [
             'driver' => 'mongodb',
-            'dsn' => env('DB_URI'),
+            'dsn' => env('MONGODB_URI'),
             'database' => 'bigsearch', // replace 'bigsearch' with your database name
         ],
 
         'mongodb_mflix' => [
             'driver' => 'mongodb',
-            'dsn' => env('DB_URI'),
+            'dsn' => env('MONGODB_URI'),
             'database' => 'sample_mflix',
         ],
             

@@ -12,8 +12,9 @@ RUN touch /var/log/php-errors.log && chown www-data:www-data /var/log/php-errors
 
 # Update the packages
 # Install system packages required for MongoDB extension
+# 'mysql-client' so we can log into mysql from the PHP container with the command 'mysql -h mysql -u root -p' where mysql is the service name
 RUN apt-get update \
-    && apt-get install -y libssl-dev wget git unzip 
+    && apt-get install -y libssl-dev wget git unzip default-mysql-client
 
 RUN pecl apt update \
     && apt install libzip-dev -y \
@@ -21,7 +22,8 @@ RUN pecl apt update \
     && rm -rf /var/lib/apt/lists/*
 
 # Required for MySQL to work in PHP
-RUN docker-php-ext-install mysqli
+RUN docker-php-ext-install mysqli && \
+    docker-php-ext-install pdo_mysql
 
 # Test if already installed and
 # install the <latest> mongodb PHP extension
@@ -38,7 +40,8 @@ RUN bash -c '[[ -n "$(pecl list | grep xdebug)" ]]\
 # install Redis PHP driver
 RUN pecl install -o -f redis \
 &&  rm -rf /tmp/pear \
-&&  docker-php-ext-enable redis
+&&  docker-php-ext-enable redis \
+&&  docker-php-ext-enable pdo_mysql
 
 # Task: copy rep's PHP .ini files to be automatically parsed
 #

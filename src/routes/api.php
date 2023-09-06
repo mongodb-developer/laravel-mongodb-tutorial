@@ -264,3 +264,16 @@ Route::get('/create_index/', function (Request $request) {
 
     return ['status' => 'executed', 'data' => $result ];
 });
+
+
+/* 
+    Laravel check on the MySQL connection
+*/
+Route::get('/test_mysql/', function (Request $request) {
+    try {
+        DB::connection()->getPdo();
+        return ['status' => 'executed', 'data' => 'Successfully connected to the DB.' ];
+    } catch (\Exception $e) {
+        return ['status' => 'FAIL. exception', 'data' => $e ];
+    }
+});

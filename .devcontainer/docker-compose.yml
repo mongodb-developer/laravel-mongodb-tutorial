@@ -43,14 +43,13 @@ services:
     # we don't need to expose the port 9003 here for Xdebug because the 
     # connection comes from inside the PHP container to the IDE via port 9003
     
-
   # MySQL Service
   mysql:
     image: ${MYSQL_IMAGE}
     environment:
       MYSQL_ROOT_PASSWORD: rootpassword
       MYSQL_DATABASE: mydatabase
-      MYSQL_USER: rootuser
+      MYSQL_USER: myuser
       MYSQL_PASSWORD: mypassword
     volumes:
       # map local /data/ folder to container /var/lib/mysql for MySQL data persistence
