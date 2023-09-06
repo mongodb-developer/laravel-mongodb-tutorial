@@ -58,20 +58,20 @@ services:
       # the two variales below don't seem to be used at all. Commenting out for now
       #MYSQL_USER: myuser 
       #MYSQL_PASSWORD: mypassword
-    volumes:
+    #volumes:
       # map local /data/ folder to container /var/lib/mysql for MySQL data persistence
-      - ${MYSQL_DATA_HOST_PATH}:${MYSQL_DATA_CONTAINER_PATH}
+      # - ${MYSQL_DATA_HOST_PATH}:${MYSQL_DATA_CONTAINER_PATH}
     ports:
       - "3306:3306"
       # host_port:container_port
 
 
-  redis:
-      image: redis:latest
-      ports:
-        - "6379:6379"
-      volumes:
-        - ${REDIS_DATA_HOST_PATH}:${REDIS_DATA_CONTAINER_PATH}
+#  redis:
+#      image: redis:latest
+#      ports:
+#        - "6379:6379"
+#      volumes:
+#        - ${REDIS_DATA_HOST_PATH}:${REDIS_DATA_CONTAINER_PATH}
 
 # Notes:
 #
