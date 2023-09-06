@@ -42,6 +42,10 @@ services:
       - ${PHP_WEBROOT_HOST_PATH}:${PHP_WEBROOT_CONTAINER_PATH}
     # we don't need to expose the port 9003 here for Xdebug because the 
     # connection comes from inside the PHP container to the IDE via port 9003
+    environment:
+      - DATABASE_URL=mysql://root:rootpassword@mysql:3306/mydatabase
+    depends_on:
+      - mysql
     
   # MySQL Service
   mysql:
