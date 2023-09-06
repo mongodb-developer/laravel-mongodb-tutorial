@@ -13,8 +13,9 @@ RUN touch /var/log/php-errors.log && chown www-data:www-data /var/log/php-errors
 # Update the packages
 # Install system packages required for MongoDB extension
 # 'mysql-client' so we can log into mysql from the PHP container with the command 'mysql -h mysql -u root -p' where mysql is the service name
+# 'iputils-ping' to get the ping command
 RUN apt-get update \
-    && apt-get install -y libssl-dev wget git unzip default-mysql-client
+    && apt-get install -y libssl-dev wget git unzip default-mysql-client iputils-ping
 
 RUN pecl apt update \
     && apt install libzip-dev -y \
