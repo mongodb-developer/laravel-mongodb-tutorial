@@ -1,5 +1,5 @@
 {
-    "name": "laravel/laravel",
+    "name": "mongodb-developer/laravel9-mongodb-tutorial",
     "type": "project",
     "description": "A tutorial to shows how to connect and use Laravel with MongoDB",
     "keywords": ["framework", "laravel"],
@@ -8,10 +8,10 @@
         "php": "^8.0",
         "fruitcake/laravel-cors": "^2.0.5",
         "guzzlehttp/guzzle": "^7.2",
-        "jenssegers/mongodb": "^3.9",
         "laravel/framework": "^9.0",
         "laravel/sanctum": "^2.14",
-        "laravel/tinker": "^2.7"
+        "laravel/tinker": "^2.7",
+        "mongodb/laravel-mongodb": "^3.9"
     },
     "require-dev": {
         "fakerphp/faker": "^1.9.1",
