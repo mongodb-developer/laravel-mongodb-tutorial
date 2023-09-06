@@ -1,14 +1,15 @@
 # How To Build a Laravel + MongoDB Back End Service 
 
-This code was writting to accompany [this article](https://www.mongodb.com/developer/languages/php/laravel-mongodb-tutorial/?utm_campaign=devrel).
+This code was written to accompany [this tutorial article](https://www.mongodb.com/developer/languages/php/laravel-mongodb-tutorial/?utm_campaign=devrel).
 
 
 ## Prerequisites
 You'll need the following installed on your computer to follow along with this tutorial:
 
 - A MongoDB Atlas cluster 
-  - [Create a free cluster](https://www.mongodb.com/try?utm_campaign=devrel) and [load the MongoDB sample data](https://www.mongodb.com/basics/sample-database?utm_campaign=devrel).
-- A code editor of your choice. 
+  - [Create a **free** cluster](https://www.mongodb.com/try?utm_campaign=devrel) and [load the MongoDB sample data](https://www.mongodb.com/basics/sample-database?utm_campaign=devrel).
+- A GitHub account if you want to use GitHub Codespaces (a 1-click experience)
+- A code editor of your choice for local development 
   - We suggeest [Visual Studio Code](https://code.visualstudio.com/download). Check the optional [MongoDB for VS Code](https://www.mongodb.com/products/vs-code?utm_campaign=devrel) extension.
 
 The article mentions several ways to get a Laravel development environment up and running. 
@@ -29,45 +30,45 @@ The article mentions several ways to get a Laravel development environment up an
 
 # 👋 Before you run this Laravel app
 
-## 1. Laravel setup
+## 1. Final Laravel app setup
 
-After cloning the code repo or launching a Docker/CodeSpaces instance, the project needs a few more things before the Laravel App can run:
+After cloning the code repo or launching a Docker/CodeSpaces instance, a script called `init_repo.sh` will be automatically executed (as setup in devcontainer.json) to:
 
-1. install dependencies via Composer
-2. create a new .env file
-3. generate a new Laravel App Key
+- install dependencies via Composer
+- create a new .env file
+- generate a new Laravel App Key
 
-You can conveniently do all three by running the `init_repo.sh` from the 
-PHP container. 
+1. All you need to do is to **add your MongoDB credentials in Laravel's .env file**, using the MONGODB_URI environment variable. Here's [how to get your credentials](https://www.mongodb.com/docs/guides/atlas/connection-string/?utm_campaign=devrel) It looks something like this:
 
-<img src="https://i.imgur.com/P0ZNlot.png">
+```
+MONGODB_URI=mongodb+srv://USERNAME:PASSWORD@clustername.subdomain.mongodb.net/?retryWrites=true&w=majority
+```
 
-The script will install the package via Composer, create an .env and create an App key.
+❗Note that this branch already has the Laravel Model and Migrations already created and ready, but the tables have been initialized yet. 
 
-<img src="https://i.imgur.com/6P6MlFX.png">
+2. You can test your credentials by using the code's API endpoint
 
-## 2. Ready!
+```
+<siteroot>/api/ping/
+```
 
-Head to the site URL and you should see the Laravel Homepage
+Find the site's root URL by going to the "Ports" tab and click on the globe icon of port 80
 
 <img src="https://i.imgur.com/pkORDBj.png">
 
+3. If the MongoDB ping test worked, use this command in the terminal to initialize the tables
+
+`php artisan migrate:refresh`
+
 <p></p>
+
+## 2. Ready!
 
 <img src="https://i.imgur.com/fbZlygD.png">
 
 Our base Laravel app is ready 🥳. 
 
-❗Note that this branch already has the Model and Migrations already setup. 
-
-
-**Next**, you can connect to a MongoDB Cluster and try some of the things we talked about in our [How To Build a Laravel + MongoDB Back End Service](https://www.mongodb.com/developer/languages/php/laravel-mongodb-tutorial/)
-
-Add the MongoDB connection string with the username / password to the .env file. add this line, but remember that your connection string might look different.
-
-In .env, add
-
-`DB_URI=mongodb+srv://USERNAME:PASSWORD@clustername.subdomain.mongodb.net/?retryWrites=true&w=majority`
+**Next**, try some of the things we talked about in our [How To Build a Laravel + MongoDB Back End Service](https://www.mongodb.com/developer/languages/php/laravel-mongodb-tutorial/)
 
 #  🚀 Launch locally with Docker
 
@@ -76,10 +77,10 @@ Assuming that you already have Docker Desktop installed on Windows/Mac or Docker
 - clone the repository to a local directory
 - navigate to the ./devcontainer folder
 - execute `docker compose up`
-- in the PHP container, execute the init_repo.sh script
+- in the PHP container, execute `sh init_repo.sh`
+- initialize your .env file as instructed above
 
-Once the containe(s) are up, visit http://localhost
-
+Once the container(s) are up, visit http://localhost
 
 # Optional: Xdebug
 
