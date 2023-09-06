@@ -1,4 +1,6 @@
 {
+	"name": "laravel9-mongodb-tutorial",
+
 	// Mandatory definition for .devcontainer
 	//
 	// which service AS DEFINED IN .devcontainer/docker-compose.yml 
@@ -9,6 +11,8 @@
 	// we have multiple containers (nginx, PHP, MySQL, redis)
 	// so we'll use a compose .yml file instead of defining the services in devcontainer.json
     "dockerComposeFile": "./docker-compose.yml",
+
+	"shutdownAction": "stopCompose",
 
 	// Mandatory definition for .devcontainer
 	//
@@ -37,5 +41,8 @@
 		}
 	},
 
-	"forwardPorts": [80]
+	"forwardPorts": [80],
+
+	// execute our one-time repo init if /vendor/ does not exist
+	"postCreateCommand": "sh init_repo.sh"
 }

@@ -53,6 +53,18 @@ Route::get('/ping', function (Request $request) {
 });
 
 /* 
+    Laravel check on the MySQL connection
+*/
+Route::get('/test_mysql/', function (Request $request) {
+    try {
+        DB::connection()->getPdo();
+        return ['status' => 'executed', 'data' => 'Successfully connected to the DB.' ];
+    } catch (\Exception $e) {
+        return ['status' => 'FAIL. exception', 'data' => $e ];
+    }
+});
+
+/* 
     Create a new "customer" in our SQL database
     This is just to show the code looks identical to the MongoDB version
 */
@@ -263,17 +275,4 @@ Route::get('/create_index/', function (Request $request) {
     $result = DB::connection('mongodb')->getCollection('laracoll')->createIndex($indexKeys, $indexOptions); 
 
     return ['status' => 'executed', 'data' => $result ];
-});
-
-
-/* 
-    Laravel check on the MySQL connection
-*/
-Route::get('/test_mysql/', function (Request $request) {
-    try {
-        DB::connection()->getPdo();
-        return ['status' => 'executed', 'data' => 'Successfully connected to the DB.' ];
-    } catch (\Exception $e) {
-        return ['status' => 'FAIL. exception', 'data' => $e ];
-    }
 });
