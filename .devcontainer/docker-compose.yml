@@ -25,7 +25,7 @@ services:
     - ${NGINX_HOST_CONFD_DIR}:${NGINX_CONTAINER_CONFD_DIR}
     depends_on:
       - php
-      - mysql
+      - mysql_service
 
   # PHP Service
   php:    
@@ -43,23 +43,27 @@ services:
     # we don't need to expose the port 9003 here for Xdebug because the 
     # connection comes from inside the PHP container to the IDE via port 9003
     environment:
-      - DATABASE_URL=mysql://root:rootpassword@mysql:3306/mydatabase
+      # laravel's default mysql config looks for the DATABASE_URL environment variable
+      - DATABASE_URL=mysql://root:${MYSQL_ROOT_PASSWORD}@mysql_service:3306/${MYSQL_DATABASE}
     depends_on:
-      - mysql
+      - mysql_service
     
   # MySQL Service
-  mysql:
+  mysql_service:
     image: ${MYSQL_IMAGE}
     environment:
-      MYSQL_ROOT_PASSWORD: rootpassword
-      MYSQL_DATABASE: mydatabase
-      MYSQL_USER: myuser
-      MYSQL_PASSWORD: mypassword
+      MYSQL_ROOT_PASSWORD: ${MYSQL_ROOT_PASSWORD}
+      MYSQL_DATABASE: ${MYSQL_DATABASE}
+
+      # the two variales below don't seem to be used at all. Commenting out for now
+      #MYSQL_USER: myuser 
+      #MYSQL_PASSWORD: mypassword
     volumes:
       # map local /data/ folder to container /var/lib/mysql for MySQL data persistence
       - ${MYSQL_DATA_HOST_PATH}:${MYSQL_DATA_CONTAINER_PATH}
     ports:
-      - "${MYSQL_HOST_PORT}:${MYSQL_CONTAINER_PORT}"
+      - "3306:3306"
+      # host_port:container_port
 
 
   redis:
