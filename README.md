@@ -9,6 +9,7 @@ You'll need the following installed on your computer to follow along with this t
 - A MongoDB Atlas cluster 
   - [Create a **free** cluster](https://www.mongodb.com/try?utm_campaign=devrel) and [load the MongoDB sample data](https://www.mongodb.com/basics/sample-database?utm_campaign=devrel).
 - A GitHub account if you want to use GitHub Codespaces (a 1-click experience)
+  - The `master` repo has all the code, but we also have a `starter` branch if you want to follow the project from scratch and build the migrations etc.
 - A code editor of your choice for local development 
   - We suggeest [Visual Studio Code](https://code.visualstudio.com/download). Check the optional [MongoDB for VS Code](https://www.mongodb.com/products/vs-code?utm_campaign=devrel) extension.
 
