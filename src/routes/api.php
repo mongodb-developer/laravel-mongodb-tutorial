@@ -39,7 +39,7 @@ Route::get('/hello_world/', function (Request $request) {
 /* 
    Send a ping to our MongoDB cluster to see if our connection settings are correct 
 */
-Route::get('/ping', function (Request $request) {
+Route::get('/test_mongodb/', function (Request $request) {
 
     $connection = DB::connection('mongodb');
     $msg = 'MongoDB is accessible!';
@@ -50,6 +50,18 @@ Route::get('/ping', function (Request $request) {
     }
 
     return ['msg' => $msg];
+});
+
+/* 
+    Laravel check on the MySQL connection
+*/
+Route::get('/test_mysql/', function (Request $request) {
+    try {
+        DB::connection()->getPdo();
+        return ['status' => 'executed', 'data' => 'Successfully connected to the DB.' ];
+    } catch (\Exception $e) {
+        return ['status' => 'FAIL. exception', 'data' => $e ];
+    }
 });
 
 /* 
@@ -153,20 +165,6 @@ Route::get('/create_nested/', function (Request $request) {
     }
 
     return ['status' => $message, 'data' => $success];
-});
-
-
-/* 
-    ❌❌❌ insertOne() works well with an stdClass, but ❌ not with a Model (use Model::save() instead)
-*/
-Route::get('/create_native/', function (Request $request) {   
-
-    /// ??? 
-
-    $resp       = new stdClass;
-    $resp->msg  = "executed";
-    $resp->data = $result;
-    return $resp;
 });
 
 /* 
