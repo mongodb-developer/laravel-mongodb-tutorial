@@ -20,15 +20,4 @@ Route::get('/', function () {
     return view('welcome');
 });
 
-
-Route::get('/info', function () {
-    phpinfo();
-});
-
-
-Route::get('/xdebug', function () {
-    xdebug_info();
-});
-
-
 Route::get('/post/{slug}', [PostController::class, 'show']);
