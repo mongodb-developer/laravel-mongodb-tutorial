@@ -1,5 +1,5 @@
 {
-    "name": "laravel/laravel",
+    "name": "mongodb-developer/laravel9-mongodb-tutorial",    
     "type": "project",
     "description": "A tutorial to shows how to connect and use Laravel with MongoDB",
     "keywords": ["framework", "laravel"],
