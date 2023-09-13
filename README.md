@@ -2,7 +2,6 @@
 
 This code was written to accompany [this tutorial article](https://www.mongodb.com/developer/languages/php/laravel-mongodb-tutorial/?utm_campaign=devrel).
 
-
 ## Prerequisites
 You'll need the following installed on your computer to follow along with this tutorial:
 

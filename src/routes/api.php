@@ -1,17 +1,14 @@
 <?php
 
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Route;
 
 // added to have access to Models\Post from within our API
-use App\Models\Post;
-use App\Models\Book;
 use App\Models\CustomerMongoDB;
 use App\Models\CustomerSQL;
 
-use Jenssegers\Mongodb\Connection;
-use Jenssegers\Mongodb\Collection;
-use Jenssegers\Mongodb\Document;
+use MongoDB\Laravel\Document;
 
 /*
 |--------------------------------------------------------------------------
@@ -29,15 +26,15 @@ Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
 });
 
 
-/* 
-    Just a test 
+/*
+    Just a test
 */
 Route::get('/hello_world/', function (Request $request) {
     return ['msg' => 'hello_world'];
 });
 
-/* 
-   Send a ping to our MongoDB cluster to see if our connection settings are correct 
+/*
+   Send a ping to our MongoDB cluster to see if our connection settings are correct
 */
 Route::get('/test_mongodb/', function (Request $request) {
 
@@ -52,7 +49,7 @@ Route::get('/test_mongodb/', function (Request $request) {
     return ['msg' => $msg];
 });
 
-/* 
+/*
     Laravel check on the MySQL connection
 */
 Route::get('/test_mysql/', function (Request $request) {
@@ -64,7 +61,7 @@ Route::get('/test_mysql/', function (Request $request) {
     }
 });
 
-/* 
+/*
     Create a new "customer" in our SQL database
     This is just to show the code looks identical to the MongoDB version
 */
@@ -83,11 +80,11 @@ Route::get('/create_eloquent_sql/', function (Request $request) {
     catch (\Exception $e) {
         $msg =  'Create user via Eloquent SQL model. Error: ' . $e->getMessage();
     }
-    
+
     return ['status' => 'executed', 'msg' => $msg];
 });
 
-/* 
+/*
     Create a new "customer" in our SQL database
     This is just to show the code looks identical to the MongoDB version
 */
@@ -97,7 +94,7 @@ Route::get('/create_eloquent_mongo/', function (Request $request) {
             'guid'        => 'cust_1111',
             'first_name'  => 'John',
             'family_name' => 'Doe',
-            'email'       => 'j.doe@gmail.com',          
+            'email'       => 'j.doe@gmail.com',
             'address'     => '123 my street, my city, zip, state, country'
         ]);
         $msg = "OK";
@@ -109,17 +106,17 @@ Route::get('/create_eloquent_mongo/', function (Request $request) {
     return ['status' => 'executed', 'data' => $msg];
 });
 
-/* 
+/*
     Find a record using Eloquent + MongoDB
 */
 Route::get('/find_eloquent/', function (Request $request) {
-    
+
     $customer = CustomerMongoDB::where('guid', 'cust_1111')->get();
 
     return ['status' => 'executed', 'data' => $customer];
 });
 
-/* 
+/*
     Update a record using Eloquent + MongoDB
 */
 Route::get('/update_eloquent/', function (Request $request) {
@@ -128,7 +125,7 @@ Route::get('/update_eloquent/', function (Request $request) {
     return ['status' => 'executed', 'data' => $result];
 });
 
-/* 
+/*
    Delete a record using Eloquent + MongoDB
 */
 Route::get('/delete_eloquent/', function (Request $request) {
@@ -137,7 +134,7 @@ Route::get('/delete_eloquent/', function (Request $request) {
     return ['status' => 'executed', 'data' => $result];
 });
 
-/* 
+/*
     Create a new record with nested data, using Eloquent
 */
 Route::get('/create_nested/', function (Request $request) {
@@ -167,36 +164,36 @@ Route::get('/create_nested/', function (Request $request) {
     return ['status' => $message, 'data' => $success];
 });
 
-/* 
+/*
     Find records using a native MongoDB Query
     1 - with Model->whereRaw()
     2 - with native Collection->findOne()
     3 - with native Collection->find()
 */
 Route::get('/find_native/', function (Request $request) {
-  
+
     // a simple MongoDB query that looks for a customer based on the guid
     $mongodbquery = ['guid' => 'cust_2222'];
 
     // Option #1
     //==========
     // use Eloquent's whereRaw() function. This is the easiest way to stay close to the Laravel paradigm
-    // returns a "Illuminate\Database\Eloquent\Collection" Object
+    // returns an "Illuminate\Database\Eloquent\Collection" Object
     $results = CustomerMongoDB::whereRaw( $mongodbquery )->get();
-  
+
     // Option #2 & #3
     //==========
     // use the native MongoDB driver Collection object. with it, you can use the native MongoDB Query API
     //
     $mdb_collection = DB::connection('mongodb')->getCollection('laracoll');
-    
+
     // find the first document that matches the query
     $mdb_bsondoc    = $mdb_collection->findOne( $mongodbquery ); // returns a "MongoDB\Model\BSONDocument" Object
-    
+
     // if we want to convert the MongoDB Document to a Laravel Model, use the Model's newFromBuilder() method
     $cust    = new CustomerMongoDB();
-    $one_doc = $cust->newFromBuilder((array) $mdb_bsondoc); 
-    
+    $one_doc = $cust->newFromBuilder((array) $mdb_bsondoc);
+
     // find all documents that matches the query
     // Note: we're using find without any arguments, so ALL documents will be returned
     $mdb_cursor       = $mdb_collection->find( ); // returns a "MongoDB\Driver\Cursor" object
@@ -208,7 +205,7 @@ Route::get('/find_native/', function (Request $request) {
     return ['status' => 'executed', 'whereraw' => $results, 'document' => $one_doc, 'cursor_array' => $cust_array];
 });
 
-/* 
+/*
     Update a record using a native MongoDB Query
 */
 Route::get('/update_native/', function (Request $request) {
@@ -221,7 +218,7 @@ Route::get('/update_native/', function (Request $request) {
     return ['status' => 'executed', 'matched_docs' => $result->getMatchedCount(), 'modified_docs' => $result->getModifiedCount()];
 });
 
-/* 
+/*
     Find and delete the first record that matches the query
 */
 Route::get('/delete_native/', function (Request $request) {
@@ -233,7 +230,7 @@ Route::get('/delete_native/', function (Request $request) {
     return ['status' => 'executed', 'deleted_docs' => $result->getDeletedCount() ];
 });
 
-/* 
+/*
     Executes an aggregation pipeline
 */
 Route::get('/aggregate/', function (Request $request) {
@@ -251,14 +248,14 @@ Route::get('/aggregate/', function (Request $request) {
     return ['status' => 'executed', 'data' => $mdb_cursor->toArray() ];
 });
 
-/* 
-    Create an index with a primary key 
+/*
+    Create an index with a primary key
 */
 Route::get('/create_index/', function (Request $request) {
-    
+
     $indexKeys   = ["guid" => 1];
     $indexOptions = ["unique" => true];
-    $result = DB::connection('mongodb')->getCollection('laracoll')->createIndex($indexKeys, $indexOptions); 
+    $result = DB::connection('mongodb')->getCollection('laracoll')->createIndex($indexKeys, $indexOptions);
 
     return ['status' => 'executed', 'data' => $result ];
 });
