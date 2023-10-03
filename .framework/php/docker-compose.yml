@@ -1,0 +1,62 @@
+# build command: docker compose build
+# docker uses the .env file BY DEFAULT. Any other name and you'll have to specify it in the command line
+# docker compose --env-file FILENAME.env build
+
+# docker compose version
+version: '3.4'
+
+# Services
+services:
+
+  # Nginx Service
+  nginx:
+
+    image: nginx:alpine
+    ports:
+      - 80:80
+    volumes:
+      - ./src:/var/www/htdoc
+      - ./.docker/nginx/conf.d:/etc/nginx/conf.d
+    depends_on:
+      - php
+      - mysql_service
+
+  # PHP Service
+  php:    
+    build:
+      context: ./.docker/php
+      dockerfile: Dockerfile
+      args:
+        RUNTIME_PHP_IMAGE: php:8.2-fpm
+    image: php:8.2-fpm
+    # container-path
+    working_dir: /var/www/htdoc
+    volumes:
+      - ./src:/var/www/htdoc
+    environment:
+      - DATABASE_URL=mysql://root:rootpassword@mysql_service:3306/mydatabase
+    depends_on:
+      - mysql_service
+
+
+
+  # MySQL Service
+  mysql_service:
+    image: mysql:5.7
+
+    environment:
+      MYSQL_ROOT_PASSWORD: rootpassword
+      MYSQL_DATABASE: mydatabase
+
+
+#  redis:
+#      image: redis:latest
+#      ports:
+#        - "6379:6379"
+#      volumes:
+#        - ${REDIS_DATA_HOST_PATH}:${REDIS_DATA_CONTAINER_PATH}
+
+# Notes:
+#
+# From Docker Compose version 3.4 the name of the volume can be dynamically generated from environment variables placed in an .env file (this file has to be in the same folder as docker-compose.yml is).
+#
