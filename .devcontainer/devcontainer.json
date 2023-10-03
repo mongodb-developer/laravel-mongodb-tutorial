@@ -1,22 +1,6 @@
 {
 	"name": "laravel-fresh-install",
 
-	// workspaceFolder describes the CONTAINER folder
-	// in which the "service" (php here) is configured to mount the project
-	// in our case, "/var/www/htdoc" refers to 
-	// ${WEBROOT_HOST_PATH}:${WEBROOT_CONTAINER_PATH} in our "php" service "volumeS"
-	// these are defined in .devcontainer/.env as follows:
-	// WEBROOT_HOST_PATH=../src
-	// WEBROOT_CONTAINER_PATH=/var/www/htdoc
-	"workspaceFolder": "/var/www/htdoc",
-	
-	// NOT REQUIRED, because our mounts are defined in the .yml file
-	//
-	// mount defined in docker-compose.yml
-	//"mounts": [
-	//	"source=${localWorkspaceFolder},target=/src,type=bind"
-	//],
-
 	// "xdebug.php-debug" = official XDEBUG extension
 	"customizations": {
 		"vscode": {
