@@ -1,37 +1,6 @@
 {
 	"name": "laravel-fresh-install",
 
-	// Mandatory definition for .devcontainer
-	//
-	// which service AS DEFINED IN .devcontainer/docker-compose.yml 
-	// do we want VS Code to attach to?
-	// here, we choose the "php" service since that's where our code is executed
-    "service": "php",
-
-	// we have multiple containers (nginx, PHP, MySQL, redis)
-	// so we'll use a compose .yml file instead of defining the services in devcontainer.json
-    "dockerComposeFile": "./docker-compose.yml",
-
-	"shutdownAction": "stopCompose",
-
-	// Mandatory definition for .devcontainer
-	//
-	// workspaceFolder describes the CONTAINER folder
-	// in which the "service" (php here) is configured to mount the project
-	// in our case, "/var/www/htdoc" refers to 
-	// ${WEBROOT_HOST_PATH}:${WEBROOT_CONTAINER_PATH} in our "php" service "volumeS"
-	// these are defined in .devcontainer/.env as follows:
-	// WEBROOT_HOST_PATH=../src
-	// WEBROOT_CONTAINER_PATH=/var/www/htdoc
-	"workspaceFolder": "/var/www/htdoc",
-	
-	// NOT REQUIRED, because our mounts are defined in the .yml file
-	//
-	// mount defined in docker-compose.yml
-	//"mounts": [
-	//	"source=${localWorkspaceFolder},target=/src,type=bind"
-	//],
-
 	// "xdebug.php-debug" = official XDEBUG extension
 	"customizations": {
 		"vscode": {
